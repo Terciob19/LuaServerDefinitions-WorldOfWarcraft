@@ -266,6 +266,7 @@
 ---@alias addonname string name of an addon, same as the name of the ToC file.
 ---@alias profile table a table containing the settings of an addon, usually saved in the SavedVariables file.
 ---@alias profilename string name of a profile.
+---@alias anchorid number a number that represents an anchor point, such as topleft, topright, bottomleft, bottomright, top, bottom, left, right, center.
 
 ---@class _G
 ---@field RegisterAttributeDriver fun(statedriver: frame, attribute: string, conditional: string)
@@ -319,6 +320,7 @@
 ---@field SetPoint fun(self: uiobject, point: anchorpoint, relativeFrame: uiobject, relativePoint: anchorpoint, xOffset: number, yOffset: number)
 ---@field ClearAllPoints fun(self: uiobject)
 ---@field CreateAnimationGroup fun(self: uiobject, name: string|nil, templateName: string|nil) : animationgroup
+---@field SetIgnoreParentAlpha fun(self: region, ignore: boolean)
 
 ---@class animationgroup : uiobject
 ---@field CreateAnimation fun(self: animationgroup, animationType: string, name: string|nil, inheritsFrom: string|nil) : animation
@@ -503,8 +505,6 @@
 ---@field GetVerticalScrollRange fun(self: scrollframe) : number
 
 ---@class region : uiobject
----@field SetIgnoreParentAlpha fun(self: region, ignore: boolean)
-
 
 ---@class fontstring : region
 ---@field SetDrawLayer fun(self: fontstring, layer: drawlayer, subLayer: number?)
@@ -619,6 +619,18 @@
 ---@field HasFocus fun(self:editbox) : boolean return true if the editbox has focus
 ---@field HighlightText fun(self:editbox, start:number?, finish:number?) select a portion of the text, passing zero will select the entire text
 
+---@class slider : statusbar
+---@field Enable fun(self: slider)
+---@field Disable fun(self: slider)
+---@field SetEnabled fun(self: slider, enable: boolean)
+---@field IsEnabled fun(self: slider) : boolean
+---@field GetObeyStepOnDrag fun(self: slider) : boolean
+---@field GetStepsPerPage fun(self: slider) : number
+---@field GetThumbTexture fun(self: slider) : texture
+---@field IsDraggingThumb fun(self: slider) : boolean
+---@field SetObeyStepOnDrag fun(self: slider, obeyStep: boolean)
+---@field SetThumbTexture fun(self: slider, texture: textureid|texturepath)
+---@field SetStepsPerPage fun(self: slider, steps: number)
 
 INVSLOT_FIRST_EQUIPPED = true
 INVSLOT_LAST_EQUIPPED = true
@@ -627,6 +639,234 @@ LE_PARTY_CATEGORY_INSTANCE = true
 --functions
 C_ChatInfo = true
 
+
+---linearly interpolates between two values. Example: Lerp(1, 2, 0.5) return 1.5
+---@param startValue number The starting value.
+---@param endValue number The ending value.
+---@param amount number The interpolation amount (between 0 and 1).
+---@return number amount The interpolated value.
+function Lerp(startValue, endValue, amount) return 0 end
+
+---clamps a value between a minimum and maximum range. Example: Clamp(17, 13, 15) return 15
+---@param value number The value to clamp.
+---@param min number The minimum value of the range.
+---@param max number The maximum value of the range.
+---@return number value The clamped value.
+function Clamp(value, min, max) return 0 end
+
+--lock a value to be between 0 and 1. Example: Saturate(1.324) return 1, Saturate(-0.324) return 0
+---@param value number The value to saturate.
+---@return number value The saturated value.
+function Saturate(value) return 0 end
+
+---wraps a value within a specified range. Example: Wrap(17, 13) return 4
+---@param value number The value to wrap.
+---@param max number The maximum value of the range.
+---@return number value The wrapped value.
+function Wrap(value, max) return 0 end
+
+---wraps a value within a specified range using modular arithmetic. Example: ClampMod(11, 3) return 2 (11 % 3 = 2)
+---@param value number The value to be wrapped.
+---@param mod number The modulus defining the range. The value will be wrapped within the range from 0 to mod - 1.
+---@return number value The wrapped value within the specified range.
+function ClampMod(value, mod) return 0 end
+
+---clamps an angle value within the range of 0 to 359 degrees.
+---@param value number The angle value to be clamped.
+---@return number value The clamped angle value within the range of 0 to 359 degrees.
+function ClampDegrees(value) return 0 end
+
+---negates a value if a condition is true, otherwise returns the original value.
+---@param value number The value to be negated or returned.
+---@param condition boolean The condition determining whether to negate the value.
+---@return number value The negated value if the condition is true, otherwise the original value.
+function NegateIf(value, condition) return 0 end
+
+---Returns a formatted version of its variable number of arguments following the description given in its first argument.
+---@param s string|number
+---@param ... any
+---@return string
+---@nodiscard
+function format(s, ...) return "" end
+
+table.wipe = true
+wipe = true
+
+---returns the maximum value among the given numbers.
+---@param ... number The numbers to compare.
+---@return number The maximum value.
+max = function(...) return 0 end
+
+---returns the minimum value among the given numbers.
+---@param ... number The numbers to compare.
+---@return number The minimum value.
+min = function(...) return 0 end
+
+C_ChallengeMode = {}
+---return true if the player is in a challenge mode dungeon.
+---@return boolean bIsActive Whether the player is in a challenge mode dungeon.
+function C_ChallengeMode.IsChallengeModeActive() return true end
+
+PixelUtil = {}
+
+---@param object statusbar
+---@param value number
+PixelUtil.SetStatusBarValue = function(object, value) end
+
+---@param object uiobject
+---@param width number
+PixelUtil.SetWidth = function(object, width) end
+
+---@param object uiobject
+---@param height number
+PixelUtil.SetHeight = function(object, height) end
+
+---@param object uiobject
+---@param width number
+---@param height number
+PixelUtil.SetSize = function(object, width, height) end
+
+---@param object uiobject
+---@param point string
+---@param relativeTo uiobject
+---@param relativePoint string
+---@param offsetX number
+---@param offsetY number
+PixelUtil.SetPoint = function(object, point, relativeTo, relativePoint, offsetX, offsetY) end
+
+---@param desiredPixels number
+---@param layoutScale number
+---@return number
+PixelUtil.ConvertPixelsToUI = function(desiredPixels, layoutScale) return 0 end
+
+---@param uiUnitSize number
+---@param layoutScale number
+---@param minPixels number
+---@return number
+PixelUtil.GetNearestPixelSize = function(uiUnitSize, layoutScale, minPixels) return 0 end
+
+---@return number
+PixelUtil.GetPixelToUIUnitFactor = function() return 0 end
+
+---@param desiredPixels number
+---@param region region
+---@return number
+PixelUtil.ConvertPixelsToUIForRegion = function(desiredPixels, region) return 0 end
+
+---@class aurautil
+AuraUtil = {}
+
+---a table containing filter flags for aura filtering.
+AuraUtil.AuraFilters = {
+    Cancelable = "CANCELABLE",                 -- Filter for cancelable auras.
+    IncludeNameplateOnly = "INCLUDE_NAME_PLATE_ONLY", -- Filter for including nameplate-only auras.
+    Harmful = "HARMFUL",                       -- Filter for harmful auras.
+    Raid = "RAID",                             -- Filter for raid auras.
+    NotCancelable = "NOT_CANCELABLE",          -- Filter for non-cancelable auras.
+    Helpful = "HELPFUL",                       -- Filter for helpful auras.
+    Player = "PLAYER",                         -- Filter for player auras.
+    Maw = "MAW",                               -- Filter for Maw-related auras.
+}
+
+---a function that determines if an aura is a priority debuff.
+---@param spellId string The name of the aura to check.
+---@return boolean bIsPriorityDebuff Whether the aura is a priority debuff.
+AuraUtil.IsPriorityDebuff = function(spellId) return true end
+
+---a function that determines if a buff should be displayed.
+---@param unit string The unit ID to check.
+---@param spellId string The name of the aura to check.
+---@return boolean bShouldDisplayBuff Whether the buff should be displayed.
+AuraUtil.ShouldDisplayBuff = function(unit, spellId) return true end
+
+---a function that creates a filter string based on the provided filters.
+---@param filters table A table containing aura filters.
+---@return string filterString The generated filter string.
+AuraUtil.CreateFilterString = function(filters) return "" end
+
+---a function that determines if a debuff should be displayed.
+---@param unit string The unit ID to check.
+---@param spellId string The name of the aura to check.
+---@return boolean bShouldDisplayDebuff Whether the debuff should be displayed.
+AuraUtil.ShouldDisplayDebuff = function(unit, spellId) return true end
+
+---a function that processes aura data.
+---@param auraInfo aurainfo The aura data to process.
+---@param displayOnlyDispellableDebuffs boolean Whether to display only dispellable debuffs.
+---@param ignoreBuffs boolean Whether to ignore buffs.
+---@param ignoreDebuffs boolean Whether to ignore debuffs.
+---@param ignoreDispelDebuffs boolean Whether to ignore dispellable debuffs.
+---@return number auraType The processed aura data.
+AuraUtil.ProcessAura = function(auraInfo, displayOnlyDispellableDebuffs, ignoreBuffs, ignoreDebuffs, ignoreDispelDebuffs) return 0 end
+
+---a function that finds an aura with the specified criteria.
+---@param predicate function The predicate function.
+---@param unit string The unit ID to search.
+---@param filter string|nil Optional filter for the type of aura to find.
+---@param predicateArg1 any Optional first argument to pass to the predicate function.
+---@param predicateArg2 any Optional second argument to pass to the predicate function.
+---@param predicateArg3 any Optional third argument to pass to the predicate function.
+AuraUtil.FindAura = function(predicate, unit, filter, predicateArg1, predicateArg2, predicateArg3) end
+
+---a function that finds an aura by its name.
+---@param unit string The unit ID to search.
+---@param auraName string The name of the aura to find.
+---@param filter string|nil Optional filter for the type of aura to find.
+---@return table auraData The found aura data.
+AuraUtil.FindAuraByName = function(unit, auraName, filter) return table end
+
+---a function that provides a default comparison function for auras.
+---@param auraA table The first aura to compare.
+---@param auraB table The second aura to compare.
+---@return boolean isEqual Whether the two auras are equal.
+AuraUtil.DefaultAuraCompare = function(auraA, auraB) return true end
+
+---a table that updates the changed type of an aura.
+AuraUtil.AuraUpdateChangedType = {
+    Dispel = 4,                                -- Updated type for dispel auras.
+    Debuff = 2,                                -- Updated type for debuff auras.
+    Buff = 3,                                  -- Updated type for buff auras.
+    None = 1,                                  -- Updated type for no change.
+}
+
+---a table containing types for unit frame debuffs.
+AuraUtil.UnitFrameDebuffType = {
+    NonBossDebuff = 5,                         -- Type for non-boss debuffs.
+    NonBossRaidDebuff = 4,                     -- Type for non-boss raid debuffs.
+    BossBuff = 2,                              -- Type for boss buffs.
+    PriorityDebuff = 3,                        -- Type for priority debuffs.
+    BossDebuff = 1,                            -- Type for boss debuffs.
+}
+
+---a function that compares unit frame debuffs.
+---@param auraInfo1 aurainfo
+---@param auraInfo2 aurainfo
+---@return table
+AuraUtil.UnitFrameDebuffComparator = function(auraInfo1, auraInfo2) return table end
+
+---a function that unpacks aura data.
+---@param auraInfo aurainfo
+---@return ... Unpacked aura data.
+AuraUtil.UnpackAuraData = function(auraInfo) end
+
+---a table containing types of dispellable debuffs.
+AuraUtil.DispellableDebuffTypes = {
+    Poison = true,                             -- Type for poison debuffs.
+    Curse = true,                              -- Type for curse debuffs.
+    Magic = true,                              -- Type for magic debuffs.
+    Disease = true,                            -- Type for disease debuffs.
+}
+
+---a function that iterates over each aura.
+---@param unit string The unit ID to iterate over.
+---@param filter string|nil Optional filter for the type of aura to iterate over.
+---@param maxCount number|nil Optional maximum number of auras to iterate over.
+---@param func function The function to call for each aura.
+---@param usePackedAura boolean Whether to use packed aura data.
+---@return any
+AuraUtil.ForEachAura = function(unit, filter, maxCount, func, usePackedAura) end
+
+
 C_Timer = {}
 ---@param delay number
 ---@param callback function
@@ -634,23 +874,21 @@ C_Timer = {}
 function C_Timer.NewTimer(delay, callback) return {} end
 
 ---@param delay number
-function C_Timer.After(delay) end
+---@param callback function
+function C_Timer.After(delay, callback) end
 
 ---@param timerHandle table
 function C_Timer.CancelTimer(timerHandle) end
 
 ---@param delay number
 ---@param callback function
----@param repetitions number
+---@param repetitions number?
 ---@return table timerHandle
 function C_Timer.NewTicker(delay, callback, repetitions) return {} end
 
-
-function C_Timer.AfterFunction(callback, delay) end
-
 ---@param list table
----@param i number
----@param j number
+---@param i number?
+---@param j number?
 ---@return ...
 function unpack(list, i, j) end
 
@@ -689,6 +927,14 @@ function floor(x) return 0 end
 ---@return any
 function tremove(table, index) return nil end
 
+--loads a string and output a function in lua.
+---@param code string The Lua code string to be executed.
+---@return function func A function to be executed.
+function loadstring(code) return function()end end
+
+---returns the number of members in the current group.
+---@return number
+GetNumGroupMembers = function() return 0 end
 
 ---@param spellId number
 ---@return number, number, number
@@ -982,7 +1228,7 @@ UseSoulstone = function(type) end
 ---@return boolean
 CanSolveArtifact = function() return true end
 
-UIParent = function() end
+UIParent = {}
 
 ---@param raceIndex number
 ---@return number, string, string, number, number, number, number, number
@@ -2762,6 +3008,23 @@ InspectUnit = function(unit) end
 
 CanShowResetInstances = function() end
 
+---@param talentId number
+---@param specGroupIndex number?
+---@param isInspect  boolean?
+---@param inspectUnit string?
+---@return number talentID
+---@return string talentName
+---@return number icon
+---@return boolean selected
+---@return boolean available
+---@return number spellID
+---@return boolean unlocked
+---@return number row
+---@return number column
+---@return boolean known
+---@return boolean grantedByAura
+GetPvpTalentInfoByID = function(talentId, specGroupIndex, isInspect, inspectUnit) return 0, "", 0, true, true, 0, true, 0, 0, true, true end
+
 ---@param index number
 ---@return number
 GetBattlefieldInstanceExpiration = function(index) return 0 end
@@ -2776,9 +3039,8 @@ GetBattlefieldInstanceRunTime = function() return 0, 0 end
 ---@return number
 GetInstanceBootTimeRemaining = function() return 0 end
 
----@param index number
 ---@return boolean, string, number, number, number, number, boolean, boolean
-GetInstanceInfo = function(index) return true, "", 0, 0, 0, 0, true, true end
+GetInstanceInfo = function() return true, "", 0, 0, 0, 0, true, true end
 
 ---@return number
 GetNumSavedInstances = function() return 0 end
@@ -2787,9 +3049,9 @@ GetNumSavedInstances = function() return 0 end
 ---@return string, string, number, boolean, boolean, boolean, boolean, number, boolean
 GetSavedInstanceInfo = function(index) return "", "", 0, true, true, true, true, 0, true end
 
----@param name string
----@return boolean
-IsInInstance = function(name) return true end
+---@return boolean bInsideInstance
+---@return string instancetype
+IsInInstance = function() return true, "" end
 
 ResetInstances = function() end
 
@@ -3913,9 +4175,10 @@ issecurevariable = function(varName) return true end
 ---@return any
 securecall = function(func, ...) return nil end
 
----@param origFunc function
----@param hookFunc function
-hooksecurefunc = function(origFunc, hookFunc) end
+---@param tbl table|string the table where the function is located, if nil, the function is a global function
+---@param origFunc string|function
+---@param hookFunc function?
+hooksecurefunc = function(tbl, origFunc, hookFunc) end
 
 InCombatLockdown = function() end
 
@@ -4084,9 +4347,9 @@ GetSpellCooldown = function(spellID) return 0, 0 end
 ---@return string
 GetSpellDescription = function(spellName) return "" end
 
----@param spellName string
----@return string, number, string
-GetSpellInfo = function(spellName) return "", 0, "" end
+---@param spellNameOrID string|number
+---@return string, number, number, number, number, number, number, number
+GetSpellInfo = function(spellNameOrID) return "", 0, 0, 0, 0, 0, 0, 0 end
 
 ---@param spellID number
 ---@return string
@@ -4330,11 +4593,30 @@ function OpeningCinematic(cinematicIndex) end
 ---@param musicFile string
 function PlayMusic(musicFile) end
 
+---fire SOUNDKIT_FINISHED if runFinishCallback is true
 ---@param soundFile string
-function PlaySound(soundFile) end
+---@param channel string?
+---@param forceNoDuplicates boolean?
+---@param runFinishCallback boolean?
+---@return boolean bWillPlay
+---@return number soundHandle
+function PlaySound(soundFile, channel, forceNoDuplicates, runFinishCallback) return true, 0 end
 
 ---@param soundFile string
-function PlaySoundFile(soundFile) end
+---@param channel string?
+---@return boolean bWillPlay
+---@return number soundHandle
+function PlaySoundFile(soundFile, channel) return true, 0 end
+
+---@param soundHandle number
+---@param fadeOutTime number?
+function StopSound(soundHandle, fadeOutTime) end
+
+---@param soundId string|number
+function MuteSoundFile(soundId) end
+
+---@param soundId string|number
+function UnmuteSoundFile(soundId) end
 
 function ReloadUI() end
 
@@ -4634,10 +4916,6 @@ function UnitExists(unit) return true end
 ---@param unit string
 ---@return string
 function UnitFactionGroup(unit) return "" end
-
----@param unit string
----@return string
-function UnitGroupRolesAssigned(unit) return "" end
 
 ---@param unit string
 ---@return string
